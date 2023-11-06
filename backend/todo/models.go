@@ -7,3 +7,7 @@ type Todo struct {
 	Content      string    `json:"content"`
 	Author       string    `json:"author"`
 }
+
+type CreateTodo struct {
+	CreationDate time.Time `gorm:"type:timestamptz"`
+}
