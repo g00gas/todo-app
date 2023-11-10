@@ -8,6 +8,6 @@ type Todo struct {
 	Author       string    `json:"author"`
 }
 
-type CreateTodo struct {
-	CreationDate time.Time `gorm:"type:timestamptz"`
+func (Todo) TableName() string {
+	return "todo"
 }

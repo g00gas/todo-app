@@ -5,7 +5,6 @@ services:
     image: postgres
     restart: always
     environment:
-      - POSTGRES_PASSWORD=pass
       - TZ=Europe/Warsaw
     ports:
       - "5433:5432"
