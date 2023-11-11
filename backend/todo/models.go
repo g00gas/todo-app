@@ -7,3 +7,7 @@ type Todo struct {
 	Content      string    `json:"content"`
 	Author       string    `json:"author"`
 }
+
+func (Todo) TableName() string {
+	return "todo"
+}
