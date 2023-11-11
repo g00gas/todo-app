@@ -5,9 +5,8 @@ import (
 	"net/http"
 	"time"
 
-	"todo_gin/config"
-
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 func GetTodoHelloHandler(ctx *gin.Context) {
@@ -22,7 +21,7 @@ func GetTodoHelloHandler(ctx *gin.Context) {
 func PostTodo(ctx *gin.Context) {
 	var todo Todo
 	ctx.BindJSON(&todo)
-	db := config.GetDatabaseConnection()
+	db := ctx.MustGet("DB").(*gorm.DB)
 	result := db.Create(&todo)
 	if result.Error != nil {
 		fmt.Errorf("Couldn't create a resource: %w", result.Error)
