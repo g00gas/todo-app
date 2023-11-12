@@ -20,7 +20,7 @@ func PostTodo(ctx *gin.Context) {
 	ctx.JSON(http.StatusCreated, todo)
 }
 
-func GetTodo(ctx *gin.Context) {
+func GetTodoById(ctx *gin.Context) {
 	var todo Todo
 	id := ctx.Param("id")
 	db := ctx.MustGet("DB").(*gorm.DB)
@@ -30,4 +30,28 @@ func GetTodo(ctx *gin.Context) {
 	} else {
 		ctx.JSON(http.StatusOK, todo)
 	}
+}
+
+func GetTodos(ctx *gin.Context) {
+	var todos []Todo
+	db := ctx.MustGet("DB").(*gorm.DB)
+	result := db.Find(&todos)
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		ctx.JSON(http.StatusNotFound, gin.H{"message": "Resource not found"})
+	} else {
+		ctx.JSON(http.StatusOK, todos)
+	}
+}
+
+func DeleteTodo(ctx *gin.Context) {
+	var todo Todo
+	db := ctx.MustGet("DB").(*gorm.DB)
+	id := ctx.Param("id")
+	result := db.Delete(&todo, id)
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		ctx.JSON(http.StatusNotFound, gin.H{"message": "Resource not found"})
+	} else {
+		ctx.Status(http.StatusNoContent)
+	}
+
 }
