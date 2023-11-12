@@ -1,22 +1,13 @@
 package todo
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
-
-func GetTodoHelloHandler(ctx *gin.Context) {
-	newTodo := Todo{
-		CreationDate: time.Now(),
-		Content:      "hello, this is a test.",
-		Author:       "michal",
-	}
-	ctx.JSON(200, newTodo)
-}
 
 func PostTodo(ctx *gin.Context) {
 	var todo Todo
@@ -27,4 +18,16 @@ func PostTodo(ctx *gin.Context) {
 		fmt.Errorf("Couldn't create a resource: %w", result.Error)
 	}
 	ctx.JSON(http.StatusCreated, todo)
+}
+
+func GetTodo(ctx *gin.Context) {
+	var todo Todo
+	id := ctx.Param("id")
+	db := ctx.MustGet("DB").(*gorm.DB)
+	result := db.First(&todo, id)
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		ctx.JSON(http.StatusNotFound, gin.H{"message": "Resource not found"})
+	} else {
+		ctx.JSON(http.StatusOK, todo)
+	}
 }

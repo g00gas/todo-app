@@ -15,3 +15,7 @@ func GetDatabaseConnection() *gorm.DB {
 	}
 	return db
 }
+
+func HandleGormErrors() {
+
+}
