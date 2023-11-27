@@ -55,3 +55,33 @@ func DeleteTodo(ctx *gin.Context) {
 	}
 
 }
+
+func UpdateTodo(ctx *gin.Context) {
+	var todo Todo
+	db := ctx.MustGet("DB").(*gorm.DB)
+	id := ctx.Param("id")
+
+	if err := ctx.ShouldBindJSON(&todo); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	res := db.Model(&todo).Where("id = ?", id).Updates(&todo)
+	if res.Error != nil {
+		switch {
+		case errors.Is(res.Error, gorm.ErrRecordNotFound):
+			ctx.JSON(http.StatusNotFound, gin.H{"message": "Resource not found."})
+		default:
+			ctx.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to update todo."})
+		}
+		return
+	}
+
+	if res.RowsAffected == 0 {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to update todo."})
+		return
+	}
+	db.First(&todo, id)
+
+	ctx.JSON(http.StatusOK, todo)
+}
