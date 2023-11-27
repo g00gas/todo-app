@@ -7,4 +7,5 @@ func RegisterRoutes(r *gin.Engine) {
 	r.GET("/api/todo/:id", GetTodoById)
 	r.GET("/api/todo", GetTodos)
 	r.DELETE("/api/todo/:id", DeleteTodo)
+	r.PATCH("/api/todo/:id", UpdateTodo)
 }
