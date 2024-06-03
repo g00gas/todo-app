@@ -7,6 +7,8 @@ type Todo struct {
 	CreationDate time.Time `json:"creationDate"`
 	Content      string    `json:"content"`
 	Author       string    `json:"author"`
+	Completed    bool      `json:"completed"`
+	Title        string    `json:"title"`
 }
 
 func (Todo) TableName() string {
