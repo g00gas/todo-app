@@ -11,12 +11,20 @@ import (
 
 func PostTodo(ctx *gin.Context) {
 	var todo Todo
-	ctx.BindJSON(&todo)
-	db := ctx.MustGet("DB").(*gorm.DB)
-	result := db.Create(&todo)
-	if result.Error != nil {
-		fmt.Errorf("Couldn't create a resource: %w", result.Error)
+
+	if err := ctx.ShouldBindJSON(&todo); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input"})
+		return
 	}
+
+	db := ctx.MustGet("DB").(*gorm.DB)
+
+	if result := db.Create(&todo); result.Error != nil {
+		fmt.Printf("Couldn't create a resource: %v\n", result.Error)
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create resource"})
+		return
+	}
+
 	ctx.JSON(http.StatusCreated, todo)
 }
 
