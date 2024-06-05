@@ -2,12 +2,16 @@ CREATE TABLE IF NOT EXISTS todo (
     id SERIAL PRIMARY KEY,
     author VARCHAR(45) NOT NULL,
     content TEXT,
-    creation_date TIMESTAMPTZ NOT NULL
+    creation_date TIMESTAMPTZ NOT NULL,
+    title VARCHAR(255),
+    completed BOOLEAN NOT NULL
 );
 
-INSERT INTO todo (author, content, creation_date)
+INSERT INTO todo (author, content, creation_date, completed)
 VALUES (
     'michal',
     'Hello World!',
-    NOW()
+    NOW(),
+    'first todos',
+    FALSE
 );
