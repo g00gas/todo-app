@@ -1,9 +1,10 @@
 import {Button, Checkbox, Text, Card, CardBody, CardHeader, CardFooter, useDisclosure} from '@chakra-ui/react';
 
 import {Todo} from "../../types/todo.ts";
-import {useDeleteTodo} from "../../hooks/useTodo.ts";
+import {useDeleteTodo, useUpdateTodo} from "../../hooks/useTodo.ts";
 import CreateTodoModal from "../CreateTodoModal/CreateTodoModal.tsx";
 import dayjs from "dayjs";
+import {useQueryClient} from "@tanstack/react-query";
 
 type Props = {
     todo: Todo;
@@ -11,11 +12,17 @@ type Props = {
 
 const TodoItem = ({ todo }: Props) => {
     const deleteTodo = useDeleteTodo();
-
+    const updateTodo = useUpdateTodo();
+    const queryClient = useQueryClient();
     const handleDelete = () => {
         deleteTodo.mutate(todo.id!);
     };
-    console.log(todo)
+    const handleDoneCheck = () => {
+        const updateTodoReq: Partial<Todo> = {completed: !todo.completed}
+        updateTodo.mutate({id: todo.id!, todo: updateTodoReq}, {onSuccess: ()=> {
+                queryClient.invalidateQueries({queryKey:['todos']})
+            }})
+    }
     const { isOpen, onOpen, onClose } = useDisclosure()
     return (
         <>
@@ -28,7 +35,7 @@ const TodoItem = ({ todo }: Props) => {
                     <Text mb={2}>{todo.content}</Text>
                     <Text fontSize="sm" color="gray.500">Autor: {todo.author}</Text>
                     <Text fontSize="sm" color="gray.500">Data utworzenia: {dayjs(todo.creationDate, "DD-MM-YYYY").toString()}</Text>
-                    <Checkbox isChecked={todo.completed} mt={2}>Zrobiono</Checkbox>
+                    <Checkbox onChange={handleDoneCheck} isChecked={todo.completed} mt={2}>Zrobiono</Checkbox>
                 </CardBody>
                 <CardFooter gap="1rem">
                     <Button colorScheme="red" onClick={onOpen}>Edytuj</Button>

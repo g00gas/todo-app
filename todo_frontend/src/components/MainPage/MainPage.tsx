@@ -13,7 +13,7 @@ const MainPage = () => {
     return (
         <Flex flexDirection="row" padding="1.5rem" gap="4rem">
             {
-                isSuccess && todos.map(t=><TodoCard todo={t}/>)
+                isSuccess && todos.map(t=><TodoCard key={t.id} todo={t}/>)
             }
         </Flex>
     );
