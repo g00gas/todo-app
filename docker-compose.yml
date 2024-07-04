@@ -4,9 +4,48 @@ services:
   db:
     image: postgres
     restart: always
+    container_name: postgres
     environment:
       - TZ=Europe/Warsaw
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
     ports:
       - "5433:5432"
     volumes:
-      - ./infrastracture/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./infrastructure/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - postgres-data:/var/lib/postgresql/data
+  backend:
+    restart: always
+    container_name: backend
+    build:
+      context: ./infrastructure/
+      dockerfile: Dockerfile.backend
+    ports:
+      - "8081:8081"
+    depends_on:
+      - db
+  frontend:
+    restart: always
+    container_name: frontend
+    build:
+      context: ./infrastructure/
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+  server:
+    restart: always
+    container_name: server
+    build:
+      context: ./infrastructure/
+      dockerfile: Dockerfile.nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - db
+      - backend
+      - frontend
+volumes:
+  postgres-data:
