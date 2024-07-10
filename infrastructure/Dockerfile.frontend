@@ -7,6 +7,10 @@ RUN npm install -g pnpm
 
 
 FROM base AS build
+
+ARG BASE_URL
+ENV VITE_BASE_URL=${BASE_URL}
+
 COPY . .
 RUN ls pnpm-lock.yaml
 RUN pnpm install --frozen-lockfile
