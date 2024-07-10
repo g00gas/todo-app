@@ -20,7 +20,7 @@ services:
     container_name: backend
     build:
       context: ./backend
-      dockerfile: Dockerfile.backend
+      dockerfile: ./infrastructure/Dockerfile.backend
     ports:
       - "8081:8081"
     depends_on:
@@ -30,7 +30,7 @@ services:
     container_name: frontend
     build:
       context: ./frontend
-      dockerfile: Dockerfile.frontend
+      dockerfile: ./infrastructure/Dockerfile.frontend
     ports:
       - "3000:3000"
     depends_on:
