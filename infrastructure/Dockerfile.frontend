@@ -26,4 +26,4 @@ COPY --from=build /app/dist ./dist
 COPY --from=build /app/server.js ./server.js
 EXPOSE 3000
 
-CMD [ "pnpm", "start" ]
+CMD [ "node", "server.js" ]
