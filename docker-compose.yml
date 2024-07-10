@@ -29,7 +29,7 @@ services:
     restart: always
     container_name: frontend
     build:
-      context: ./frontend
+      context: ./todo_frontend
       dockerfile: ../infrastructure/Dockerfile.frontend
     ports:
       - "3000:3000"
