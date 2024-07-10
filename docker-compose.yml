@@ -31,12 +31,13 @@ services:
     build:
       context: ./todo_frontend
       dockerfile: ../infrastructure/Dockerfile.frontend
+      args:
+        - BASE_URL=${BASE_URL}
     ports:
       - "3000:3000"
     depends_on:
       - backend
-    environment:
-      - BASE_URL=${BASE_URL}
+
   server:
     restart: always
     container_name: server
