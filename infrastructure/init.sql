@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS todo (
     completed BOOLEAN NOT NULL
 );
 
-INSERT INTO todo (author, content, creation_date, completed)
+INSERT INTO todo (author, content, creation_date, title, completed)
 VALUES (
     'michal',
     'Hello World!',
