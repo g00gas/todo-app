@@ -18,5 +18,5 @@ func main() {
 		gin.Recovery(),
 		middleware.UseDatabase(db))
 	todo.RegisterRoutes(r)
-	r.Run("127.0.0.1:8081")
+	r.Run(":8081")
 }
