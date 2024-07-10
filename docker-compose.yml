@@ -37,6 +37,8 @@ services:
       - "3000:3000"
     depends_on:
       - backend
+    environment:
+      - BASE_URL=${BASE_URL}
 
   server:
     restart: always
